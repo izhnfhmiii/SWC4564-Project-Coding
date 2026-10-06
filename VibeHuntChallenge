@@ -1,0 +1,102 @@
+public class VibeHuntChallenge
+{
+    public static final int N = 6;
+    
+    public static String[] locations = 
+    {
+        "Check-in Zone",
+        "Gaming Arena",
+        "Creator Studio",
+        "Music Stage",
+        "Food Street",
+        "Tech & AI Zone"
+    };
+    
+    public static int[][] graph = 
+    {
+        {0, 1, 1, 0, 0, 1},
+        {1, 0, 1, 1, 0, 0},
+        {1, 1, 0, 1, 1, 0},
+        {0, 1, 1, 0, 1, 1},
+        {0, 0, 1, 1, 0, 1},
+        {1, 0, 0, 1, 1, 0}
+    };
+    
+    public static int[] way = new int[N];
+    public static boolean[] visit = new boolean[N];
+    
+    static boolean findLoop(int position)
+    {
+        if (position == N)
+        {
+            return graph[way[N - 1]] [way[0]] == 1;
+        }
+        
+        for (int v = 1; v < N; v++)
+        {
+            if (graph[way[position - 1]][v] == 1
+                    && !visit[v]) 
+                {
+                    way[position] = v;
+                    visit[v] = true;
+                    
+                    System.out.println("Finding: " + locations[v]);
+                    
+                    if (findLoop(position + 1))
+                    {
+                        return true;
+                    }
+                    
+                    System.out.println("Backtracking from the: " + locations[v]);
+                    
+                    visit[v] = false;
+                }
+        }
+        return false;
+    }
+    
+    public static void displayZone()
+    {
+        System.out.println("\n----------------------------------------");
+        System.out.println("|VIBE HUNT CHALLENGE | Validation Route|");
+        System.out.println("----------------------------------------");
+        
+        System.out.println("\nList of the Activity Zone");
+        System.out.println("1 : Check-In Zone");
+        System.out.println("2 : Gaming Arena");
+        System.out.println("3 : Creator Studio");
+        System.out.println("4 : Music Stage");
+        System.out.println("5 : Food Street");
+        System.out.println("6 : Tech & AI Zone\n");
+        
+        way[0] = 0;
+        visit[0] = true;
+        
+        if (findLoop(1))
+        {
+            System.out.println("\nVibe Hunt Challenge | Valid Route Found :");
+        
+            for (int i = 0; i < N; i++)
+            {
+                System.out.print(locations[way[i]] + " -->> ");
+            }
+        
+            System.out.println(locations[way[0]]);
+            
+            System.out.println("\n----------------------------------------------------------------");
+            System.out.println("| All locations have been visited exactly once.                |");
+            System.out.println("| Returned to the Check-In Zone.                               |");
+            System.out.println("| Thank you for joining VIBE HUNT CHALLENGE, Have a nice day ! |");
+            System.out.println("----------------------------------------------------------------");
+        }
+        else
+        {
+            System.out.println("There is no Hamiltonian Cycle has been used or exists.");
+        }
+    }
+    
+    public static void main(String[] args)
+    {
+        displayZone();
+    }
+}
